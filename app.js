@@ -1,10 +1,13 @@
 // Variables
-// async errors
 const express = require('express')
 const app = express()
 const connectDB = require('./db/connect')
 const port = 3000
+const productsRoute = require('./routes/products')
 require('dotenv').config()
+
+// async errors
+require('express-async-errors')
 
 // Middlewares Variables
 const notFoundError = require('./middleware/not-found')
@@ -18,6 +21,8 @@ app.get('/', (req, res) => {
     .status(200)
     .send('<h1>Store API</h1><a href="/products">Products route</a>')
 })
+
+app.use('/api/v1/products', productsRoute)
 
 //
 //MIDDLEWARES
