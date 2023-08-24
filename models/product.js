@@ -9,6 +9,10 @@ const productSchema = new mongoose.Schema({
     type: Number,
     required: [true, 'Product must have a price']
   },
+  featured: {
+    type: Boolean,
+    default: false
+  },
   rating: {
     type: Number,
     default: 4.5
