@@ -12,6 +12,7 @@ const getAllProductsStatic = async (req, res) => {
 const getAllProducts = async (req, res) => {
   const { featured, company, name, sort, fields, numericFilters } = req.query
   const queryObj = {}
+  const queryFilter = {}
   const limit = Number(req.query.limit) || 10
   let page = Number(req.query.page) || 1
   const skip = (page - 1) * limit
@@ -46,10 +47,13 @@ const getAllProducts = async (req, res) => {
       match => `-${operatorMap[match]}-`
     )
     const options = ['price', 'rating']
-    console.log(queryObj['price'])
-    console.log(filters)
+    filters = filters.split(',').forEach(item => {
+      const [field, operator, value] = item.split('-')
+      if (options.includes(field)) {
+        queryObj[field] = { [operator]: Number(value) }
+      }
+    })
   }
-
   const products = await Product.find(queryObj)
     .sort(sortList)
     .select(fieldList)
